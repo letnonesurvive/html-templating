@@ -6,6 +6,10 @@ import (
 	"net/http"
 )
 
+type User struct {
+	Name string
+}
+
 func home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
@@ -24,7 +28,9 @@ func home(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 
-	err = ts.ExecuteTemplate(w, "base", nil) // instead of ts.Execute, ExecuteTemplate to specifically want to respond using base template
+	// instead of ts.Execute, ExecuteTemplate to specifically want to respond using base template
+	// struct is being used in nav.tmpl
+	err = ts.ExecuteTemplate(w, "base", User{Name: "Ilia"})
 	if err != nil {
 		log.Println(err.Error())
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
